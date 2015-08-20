@@ -25,23 +25,25 @@ for /f "delims=" %%L in ('ffprobe -i %THE_ORIGINAL_NAME% -v error -of flat^=s^=_
 :: Get just the width value from THE_VIDEO_WIDTH (ie: remove the first 23 characters)
 SET THE_VIDEO_WIDTH=%THE_VIDEO_WIDTH:~23%
 
+::HD1080
 if "%THE_VIDEO_WIDTH%" == "1920" (
     :: FFMPEG re-encode to a temporary filename
-    ffmpeg -y -i %THE_ORIGINAL_NAME% -c:v libx264 -c:a libmp3lame %THE_TEMP_NAME%
+    ffmpeg -y -i %THE_ORIGINAL_NAME% -c:v libx264 -b:v 4000k -c:a libmp3lame %THE_TEMP_NAME%
     :: Backup the original video
     move /Y %THE_ORIGINAL_NAME% %THE_BACKUP_NAME%
     :: Move the FFMPEG converted video to the original name
     move /Y %THE_TEMP_NAME% %THE_ORIGINAL_NAME%
-    echo.HD1920 Converted: %THE_ORIGINAL_NAME% >> %LOG_FILE%
+    echo.HD1080 Converted: %THE_ORIGINAL_NAME% >> %LOG_FILE%
 )
 
+::NTSC
 if "%THE_VIDEO_WIDTH%" == "640" (
     :: FFMPEG re-encode to a temporary filename
-    ffmpeg -y -i %THE_ORIGINAL_NAME% -c:v libx264 -c:a libmp3lame %THE_TEMP_NAME%
+    ffmpeg -y -i %THE_ORIGINAL_NAME% -c:v libx264 -b:v 2000k -c:a libmp3lame %THE_TEMP_NAME%
     :: Backup the original video
     move /Y %THE_ORIGINAL_NAME% %THE_BACKUP_NAME%
     :: Move the FFMPEG converted video to the original name
     move /Y %THE_TEMP_NAME% %THE_ORIGINAL_NAME%
-    echo.SD640 Converted: %THE_ORIGINAL_NAME% >> %LOG_FILE%
+    echo.NTSC Converted: %THE_ORIGINAL_NAME% >> %LOG_FILE%
 )
 goto:eof
