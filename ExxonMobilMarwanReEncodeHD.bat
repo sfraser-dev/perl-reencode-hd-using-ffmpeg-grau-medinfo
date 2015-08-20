@@ -19,7 +19,6 @@ SET THE_FILE=%~n1
 SET THE_EXTN=%~x1
 SET THE_BACKUP_NAME="%THE_DRIVE_LETTER%%THE_PATH%%THE_FILE%%CONTAINER_EXTN%.orig"
 SET THE_TEMP_NAME="%THE_DRIVE_LETTER%%THE_PATH%%THE_FILE%TempFFMPEG.%CONTAINER_EXTN%"
-echo.%THE_TEMP_NAME%
 
 :: Use FFPROBE to get the video width 
 for /f "delims=" %%L in ('ffprobe -i %THE_ORIGINAL_NAME% -v error -of flat^=s^=_ -show_entries stream^=width') do SET THE_VIDEO_WIDTH=%%L
@@ -27,18 +26,22 @@ for /f "delims=" %%L in ('ffprobe -i %THE_ORIGINAL_NAME% -v error -of flat^=s^=_
 SET THE_VIDEO_WIDTH=%THE_VIDEO_WIDTH:~23%
 
 if "%THE_VIDEO_WIDTH%" == "1920" (
-    echo.is1920
     :: FFMPEG re-encode to a temporary filename
     ffmpeg -y -i %THE_ORIGINAL_NAME% -c:v libx264 -c:a libmp3lame %THE_TEMP_NAME%
     :: Backup the original video
     move /Y %THE_ORIGINAL_NAME% %THE_BACKUP_NAME%
     :: Move the FFMPEG converted video to the original name
     move /Y %THE_TEMP_NAME% %THE_ORIGINAL_NAME%
-    echo.Converted: %THE_ORIGINAL_NAME% >> %LOG_FILE%
+    echo.HD1920 Converted: %THE_ORIGINAL_NAME% >> %LOG_FILE%
 )
 
-if "%THE_VIDEO_WIDTH%" NEQ "1920" (
-    echo.not120
-    echo.Not converted: %THE_ORIGINAL_NAME% >> %LOG_FILE%
+if "%THE_VIDEO_WIDTH%" == "640" (
+    :: FFMPEG re-encode to a temporary filename
+    ffmpeg -y -i %THE_ORIGINAL_NAME% -c:v libx264 -c:a libmp3lame %THE_TEMP_NAME%
+    :: Backup the original video
+    move /Y %THE_ORIGINAL_NAME% %THE_BACKUP_NAME%
+    :: Move the FFMPEG converted video to the original name
+    move /Y %THE_TEMP_NAME% %THE_ORIGINAL_NAME%
+    echo.SD640 Converted: %THE_ORIGINAL_NAME% >> %LOG_FILE%
 )
 goto:eof
