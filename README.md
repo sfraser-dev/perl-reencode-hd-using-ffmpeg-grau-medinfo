@@ -1,0 +1,1 @@
+Use FFPROBE to get the width of video. If width is 1920, re-encode the video with FFMPEG. Re-name original with .orig extension, name re-encoded video what the original was called so it gets loaded in Visual Review and Edit.
