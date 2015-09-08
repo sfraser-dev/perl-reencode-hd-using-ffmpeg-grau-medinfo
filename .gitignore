@@ -3,6 +3,8 @@
 *.pkt
 *.db
 *.png
+*.swp
+*~
 
 
 *.swp
@@ -20,3 +22,4 @@ Doug_MPEG2notWorking_DOF_RossCandies/
 Optibase/
 Osprey/
 Winnov/
+ExxonMobilFullFromStor/
