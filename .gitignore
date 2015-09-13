@@ -3,6 +3,8 @@
 *.pkt
 *.db
 *.png
+*.exe
+*.dll
 *.swp
 *~
 

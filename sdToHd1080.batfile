@@ -1,0 +1,37 @@
+@echo off
+
+SET CONTAINER_EXTN=mp4
+SET LOG_FILE="toHd1080.log"
+IF EXIST %LOG_FILE% (
+    del %LOG_FILE%
+)
+:: Recursively search for media containers, call function ffmpegUpscale on each NTSC container
+for /f "delims=" %%f in ('dir "*.%CONTAINER_EXTN%" /s/b') do @call:ffmpegUpscale "%%f"
+goto:eof
+
+:: Function to convert NTSC to HD1080
+:ffmpegUpscale
+:: Resolving filenames
+SET THE_ORIGINAL_NAME="%~f1"
+SET THE_DRIVE_LETTER=%~d1
+SET THE_PATH=%~p1
+SET THE_FILE=%~n1
+SET THE_EXTN=%~x1
+SET THE_TEMP_NAME="%THE_DRIVE_LETTER%%THE_PATH%%THE_FILE%.1080.%CONTAINER_EXTN%
+SET THE_NEW_NAME="%THE_DRIVE_LETTER%%THE_PATH%%THE_FILE%%CONTAINER_EXTN%.1080
+
+:: Get the video width x height using MediaInfo
+for /f "delims=" %%L in ('MediaInfo.exe --Inform^=Video^;%%Width%% %THE_ORIGINAL_NAME%') do SET THE_VIDEO_WIDTH=%%L
+for /f "delims=" %%L in ('MediaInfo.exe --Inform^=Video^;%%Height%% %THE_ORIGINAL_NAME%') do SET THE_VIDEO_HEIGHT=%%L
+
+:: Upscale NTSC to HD1080 using a FFMPEG re-encode
+if "%THE_VIDEO_WIDTH%" == "640" (
+    if "%THE_VIDEO_HEIGHT%" == "480" (
+        :: FFMPEG upscale; temporary name needed for FFMPEG to analyse the extension
+        ffmpeg -y -i %THE_ORIGINAL_NAME% -c:v libx264 -crf 22 -s 1920x1080 -aspect 1920:1080 -c:a libmp3lame %THE_TEMP_NAME%
+        :: Change the temporary name to a filename with an innocuous extension
+        move /Y %THE_TEMP_NAME% %THE_NEW_NAME%
+        echo.NTSC upscaled to HD1080: %THE_NEW_NAME% >> %LOG_FILE%
+    )
+)
+goto:eof
