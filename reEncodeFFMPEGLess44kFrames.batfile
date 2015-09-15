@@ -1,7 +1,7 @@
 @echo off
 
 SET CONTAINER_EXTN=mp4
-SET LOG_FILE="reEncodeLess44kFrames.log"
+SET LOG_FILE="reEncodeFFMPEGLess44kFrames.log"
 IF EXIST %LOG_FILE% (
     del %LOG_FILE%
 )
