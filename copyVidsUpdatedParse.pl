@@ -18,7 +18,7 @@ my $vidCount=0;
 my $fileIn = "copyVidsUpdated.log";
 open (my $fh_in, "<", $fileIn) || die "Could not open file: $!";
 
-my $fileOut = "parse.log";
+my $fileOut = "countParseFixMP4s.log";
 open (my $fh_out, ">", $fileOut) || die "Couldn't open '".$fileOut."'for writing because: ".$!;
 
 while (my $line = <$fh_in>) {
