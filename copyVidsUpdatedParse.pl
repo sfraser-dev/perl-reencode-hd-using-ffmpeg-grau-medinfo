@@ -10,7 +10,7 @@ my $vidName;
 my $vidOriginalLocation;
 my $slotDir;
 
-my $fileName = "test.log";
+my $fileName = "copyVidsUpdated.log";
 open my $fh, $fileName or die "Could not open file: $!";
 
 while (my $line = <$fh>) {
