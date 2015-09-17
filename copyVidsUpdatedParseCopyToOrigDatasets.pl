@@ -23,6 +23,7 @@ open (my $fh_in, "<", $fileIn) || die "Could not open file: $!";
 my $fileOut = "countParseCopyMP4sToOrigDatasets.log";
 open (my $fh_out, ">", $fileOut) || die "Couldn't open '".$fileOut."'for writing because: ".$!;
 
+# read the copy log to know which dataset a repaired file belongs to
 while (my $line = <$fh_in>) {
 	chomp $line;
     # spilt each line of the copy log file I created at "=" signs
@@ -50,9 +51,8 @@ while (my $line = <$fh_in>) {
 	
 	# copy the repaired file the original dataset (this repaired file has the original name)
     system("copy \/Y $vidFixed $vidOriginalDir");
-
-    exit;
 }
+
 close $fh_in;
 close $fh_out;
 exit;
