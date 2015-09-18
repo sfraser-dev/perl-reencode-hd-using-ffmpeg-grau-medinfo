@@ -44,6 +44,7 @@ while (my $line = <$fh_in>) {
     #say $fh_out "Original name full path = $vidOriginal";
     #say $fh_out "Fixed name full path = $vidFixed";
     #say $fh_out "Backup name full path = $vidMoveName\n";
+    say "$vidFixed=$vidMoveName";
     say $fh_out "$vidFixed=$vidMoveName";
 
 	# rename original video XXX.mp4 to XXXmp4.original1 as a backup
